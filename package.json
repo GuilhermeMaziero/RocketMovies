@@ -1,0 +1,25 @@
+{
+  "name": "rocketmovies",
+  "version": "1.0.0",
+  "description": "APIs so that users can register the films they have already watched and receive ratings.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "dev": "nodemon ./src/server.js",
+    "migrate": "knex migrate:latest"
+  },
+  "keywords": ["API NODEJS","EXPRESS","bcryptjs", "CRUD"],
+  "author": "Guilhere Maziero Silva",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.18.3",
+    "express-async-errors": "^3.1.1",
+    "knex": "^3.1.0",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.0"
+  }
+}
