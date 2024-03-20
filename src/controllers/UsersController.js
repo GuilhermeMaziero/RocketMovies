@@ -9,7 +9,14 @@ class UsersController {
     async create (request, response) {
         const {name, email, password} = request.body;
 
-        const checkUserExists = await knex("users").where("email", email);
+        const checkUserExists = await knex("users").where('email', email).then((rows) => {
+            
+            if (rows.length > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        });
 
         if (checkUserExists) {
 
@@ -21,7 +28,7 @@ class UsersController {
         await knex("users").insert({
             name,
             email,
-            hashedPassword,
+            password:hashedPassword
 
         });
 
@@ -40,14 +47,14 @@ class UsersController {
             throw new AppError("Usuário não encontrado!");
         }
 
-        const userWithUpdatedEmail = await knex("users").where("email", email);
+        user.name  = name ?? user.name;
+        user.email = email ?? user.email;
+
+        const userWithUpdatedEmail = await knex("users").where("email", user.email).first();
 
         if (userWithUpdatedEmail && userWithUpdatedEmail.id !== user.id) {
             throw new AppError("Este e-mail já esta em uso!");
         }
-
-        user.name  = name ?? user.name;
-        user.email = email ?? user.email;
 
         if ( password && !old_password) {
 
@@ -56,7 +63,7 @@ class UsersController {
 
         if ( password && old_password) {
 
-            const checkOldPassword = await compare(old_passoword, user.password);
+            const checkOldPassword = await compare(old_password, user.password);
 
             if (!checkOldPassword) {
 
@@ -66,7 +73,7 @@ class UsersController {
             user.password = await hash(password,8);
         }
 
-        await knex("users").update([user.name, user.email, user.password, id]);
+        await knex("users").where({id}).update(user);
 
         return response.json();
     }

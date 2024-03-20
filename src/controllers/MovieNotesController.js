@@ -1,12 +1,21 @@
 const knex = require("../database/knex");
 
+const AppError = require("../utils/AppError");
+
 class MovieNotesController {
 
     async create(request, response) {
 
         const { title, description, rate , tags } = request.body;
 
-        const  { user_id } = request.body;
+        const  { user_id } = request.params;
+
+        console.log(rate)
+
+        if (rate && (rate < 1 || rate > 5)) {
+
+            throw new AppError("Valor inválido, o campo rate deve ser entre 1 até 5");
+        }
 
         const [note_id] = await knex("movie_notes").insert({
             title,

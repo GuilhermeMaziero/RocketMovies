@@ -12,7 +12,7 @@ module.exports = {
     },
     migrations:  {
       directory: PATH.resolve(__dirname, "src", "database", "knex", "migrations")
-    }
+    },
+    useNullAsDefault: true
   },
-  useNullAsDefault: true
 };
